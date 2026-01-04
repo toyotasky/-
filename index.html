@@ -2,210 +2,125 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gemini 廠辦情報雷達</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>廠辦專屬資料發送系統</title>
     <style>
-        /* CSS Reset & 基礎設定 */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
-        }
-
         body {
-            /* 深藍色專業商務背景 */
-            background-color: #0f172a; 
-            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            height: 100vh;
+            margin: 0;
         }
-
-        /* 主容器：限制最大寬度，模擬 App 質感 */
-        .app-container {
-            width: 100%;
-            max-width: 420px;
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
             text-align: center;
-            animation: fadeIn 0.5s ease-out;
         }
-
-        /* 標題樣式 */
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-            color: #e2e8f0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        p.subtitle {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 40px;
-        }
-
-        /* 輸入框區域 */
-        .input-group {
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        input[type="text"] {
+        h2 { color: #1a365d; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; text-align: left; }
+        label { display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: bold; }
+        select, input {
             width: 100%;
-            padding: 16px 20px;
-            font-size: 16px; /* 防止 iOS 自動縮放 */
-            border: 2px solid #334155;
-            border-radius: 12px;
-            background-color: #1e293b;
-            color: #fff;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box; /* 確保框框不會跑版 */
+            font-size: 16px;
         }
-
-        input[type="text"]::placeholder {
-            color: #64748b;
-        }
-
-        input[type="text"]:focus {
-            border-color: #3b82f6;
-            background-color: #0f172a;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-        }
-
-        /* 按鈕樣式：醒目橘色 */
         button {
             width: 100%;
-            padding: 18px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            padding: 15px;
+            background-color: #2b6cb0;
+            color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
+            font-size: 18px;
             cursor: pointer;
-            box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-            position: relative;
-            overflow: hidden;
+            transition: background 0.3s;
+            margin-top: 1rem;
         }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        /* 按鈕鎖定狀態 */
-        button:disabled {
-            background: #475569;
-            color: #94a3b8;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        /* 裝飾用：雷達圖示概念 */
-        .radar-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-
-        /* 進場動畫 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        button:hover { background-color: #2c5282; }
+        button:disabled { background-color: #cbd5e0; cursor: not-allowed; }
+        #status { margin-top: 1rem; color: #718096; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="radar-icon">📡</div>
-
-        <h1>Gemini 廠辦情報雷達</h1>
-        <p class="subtitle">專業代銷客戶背景 AI 快速分析</p>
-
-        <div class="input-group">
-            <input type="text" id="companyInput" placeholder="輸入公司名稱（例如：鴻海精密）" autocomplete="off">
-        </div>
-
-        <button id="submitBtn" onclick="sendIntelligence()">啟動 AI 偵測</button>
+<div class="card">
+    <h2>🏭 廠辦資料發送助手</h2>
+    
+    <div class="form-group">
+        <label>客戶產業類型</label>
+        <select id="clientType">
+            <option value="tech">🧪 科技業 (Tech)</option>
+            <option value="traditional">🏭 傳統產業 (Traditional)</option>
+        </select>
     </div>
 
-    <script>
-        // ==========================================
-        // 設定區：請在此替換您的 Webhook URL
-        // ==========================================
-        const WEBHOOK_URL = "YOUR_WEBHOOK_URL_HERE"; 
-        // 例如: "https://hook.eu1.make.com/..." 或 Zapier URL
-        // ==========================================
+    <div class="form-group">
+        <label>客戶 Email</label>
+        <input type="email" id="clientEmail" placeholder="輸入客戶信箱..." required>
+    </div>
 
-        async function sendIntelligence() {
-            const input = document.getElementById('companyInput');
-            const btn = document.getElementById('submitBtn');
-            const companyName = input.value.trim();
+    <button id="sendBtn" onclick="sendData()">🚀 發送資料包</button>
+    <p id="status"></p>
+</div>
 
-            // 1. 基礎驗證：檢查是否為空
-            if (!companyName) {
-                alert("請先輸入公司名稱！");
-                input.focus();
-                return;
-            }
+<script>
+    // ============================================
+    // ⚠️ 請在下方引號內貼上你的 Google Web App 網址
+    // ============================================
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbz2_-WWJyWtqaKVoe_XkmDCvSAdWkqc3_wmlWU5oGVtwAMSIKBgss1MmQ-_TjkCNbvDxg/exec"; 
+    // ============================================
 
-            // 2. 鎖定按鈕並變更狀態
-            const originalBtnText = btn.innerText;
-            btn.innerText = "偵測中...";
-            btn.disabled = true;
+    function sendData() {
+        const email = document.getElementById('clientEmail').value;
+        const type = document.getElementById('clientType').value;
+        const btn = document.getElementById('sendBtn');
+        const status = document.getElementById('status');
 
-            try {
-                // 3. 發送 fetch 請求
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ company: companyName })
-                });
-
-                // 4. 處理回應
-                if (response.ok) {
-                    // 為了使用者體驗，稍微延遲一點點再顯示成功，讓"偵測感"更強
-                    setTimeout(() => {
-                        alert("情報已傳送至您的 LINE！");
-                        input.value = ""; // 清空輸入框
-                        resetButton();
-                    }, 500);
-                } else {
-                    throw new Error('伺服器回應錯誤');
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert("傳送失敗，請檢查網路或 Webhook 設定。");
-                resetButton();
-            }
-
-            // 復原按鈕狀態的函式
-            function resetButton() {
-                btn.innerText = originalBtnText;
-                btn.disabled = false;
-            }
+        if (!email) {
+            alert("請輸入 Email！");
+            return;
         }
 
-        // 增加一個小功能：按 Enter 鍵也能送出
-        document.getElementById("companyInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                document.getElementById("submitBtn").click();
-            }
+        // 鎖定按鈕避免重複發送
+        btn.disabled = true;
+        btn.innerText = "資料打包傳送中...";
+        status.innerText = "正在呼叫雲端助理...";
+
+        // 傳送資料給 Google Apps Script
+        fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors', // 這行很重要，讓瀏覽器允許跨域傳送
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, type: type })
+        }).then(response => {
+            // 因為是 no-cors 模式，我們假設只要送出就是成功
+            status.innerText = "✅ 發送指令已送出！(請確認信箱)";
+            btn.innerText = "發送成功";
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerText = "🚀 發送資料包";
+                document.getElementById('clientEmail').value = ""; // 清空輸入框
+            }, 3000);
+        }).catch(error => {
+            status.innerText = "❌ 發生錯誤，請稍後再試";
+            console.error('Error:', error);
+            btn.disabled = false;
+            btn.innerText = "重試";
         });
-    </script>
+    }
+</script>
+
 </body>
 </html>
